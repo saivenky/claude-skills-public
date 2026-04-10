@@ -25,4 +25,3 @@ Only move to implementation when the user signals that's the direction. If in pl
 - One question per message
 - Never assume implementation is the goal
 - YAGNI: don't propose more than what's needed
-test
