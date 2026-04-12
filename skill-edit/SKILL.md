@@ -6,7 +6,7 @@ description: REQUIRED for all skill file writes and edits — never use Write/Ed
 # Skill Editor
 
 ## When to Use
-**Always invoke this skill** to create or edit any `~/.claude/skills/` file. Direct use of Write or Edit tools on skill files is prohibited.
+Always invoke for any `~/.claude/skills/` file. Direct Write/Edit use on skill files is prohibited.
 
 ---
 
@@ -31,6 +31,7 @@ description: REQUIRED for all skill file writes and edits — never use Write/Ed
 
 ## Rules
 
-- New skills: ≤500 words. Condense before saving.
-- Edits: final count ≤ baseline. Always add first, then condense to fit.
-- Always show word count before saving.
+- New skills: ≤500 words.
+- Edits: final count ≤ baseline. Add first, then condense to fit.
+- Show word count before saving.
+- Don't over-prescribe — a rule that solves the current need may constrain unexpectedly.
