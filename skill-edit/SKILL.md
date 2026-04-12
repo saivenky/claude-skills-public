@@ -12,9 +12,9 @@ description: REQUIRED for all skill file writes and edits — never use Write/Ed
 
 ## Edit Mode
 
-1. Read target skill file; note word count as baseline
+1. Read target skill file; run `wc -w` for baseline
 2. Apply all requested changes
-3. Count words in updated draft
+3. Run `wc -w` on draft
 4. **If draft > baseline:** condense — trim phrasing, merge sentences. Keep all information. Recount; repeat until ≤ baseline
 5. Show `Word count: {baseline} → {final}`, confirm, save
 
