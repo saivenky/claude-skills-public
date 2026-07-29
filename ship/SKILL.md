@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Drive the work to done. You are the tech lead running the build; the user is your **EM**.
 
-Ship hands off to `/to-tickets` and `/implement`, which are not part of this repo — install them from [mattpocock/skills](https://github.com/mattpocock/skills).
+Ship hands off to `/to-tickets` and `/implement`, not in this repo — install from [mattpocock/skills](https://github.com/mattpocock/skills). Both are user-invocable only — to run one, read `~/.claude/skills/<name>/SKILL.md` and follow it.
 
 ## 1. Set the frontier
 
@@ -20,9 +20,9 @@ Then claim the run's **worktree**. A run owns one branch and one tree, so concur
 git worktree add <worktree-root>/<repo>-<slug> -b ship/<slug>
 ```
 
-The **worktree root** is where this machine keeps agent worktrees — a declared fact, not a guess. Read it from `CLAUDE.md`; if none declares one, ask the user where trees should live and offer to record the answer there, so the next run doesn't ask again. Keep it outside every repo, or it turns up in project discovery and recursive greps.
+The **worktree root** is where this machine keeps agent worktrees — a declared fact, not a guess. Read it from `CLAUDE.md`; if none declares one, ask the user and offer to record the answer there. Keep it outside every repo, or it turns up in project discovery and recursive greps.
 
-`<slug>` names the feature. The resulting absolute path is the run's working root — you and every subagent operate there.
+`<slug>` names the feature. That absolute path is the run's working root — you and every subagent operate there.
 
 Show the ordered slice list and confirm it once. This is the last check-in until ship.
 
@@ -30,7 +30,7 @@ Show the ordered slice list and confirm it once. This is the last check-in until
 
 Take slices in dependency order, **one at a time**. For each, spawn a subagent (`model: opus`) with a fresh context whose brief is:
 
-- the worktree path, stated absolutely, as its working root — pass paths to every command rather than relying on a `cd` that won't survive the next call
+- the worktree path, absolute, as its working root — pass it to every command; a `cd` won't survive the next call
 - the slice's behaviour and acceptance criteria
 - the surrounding decisions it needs (domain vocabulary, ADRs, prior slices' shape)
 - "Implement this slice with `/implement`. Land it **green** — typecheck and tests pass — then commit to the current branch. If you cannot go green, report why instead of committing."
