@@ -1,74 +1,80 @@
 ---
 name: ship
-description: "Drive a plan or ticket set to done — one slice at a time, each in a fresh Opus subagent, escalating only what an EM would decide."
+description: "Drive a feature's tickets to done — one slice at a time, each in a fresh Opus subagent, escalating only what an EM would decide."
 disable-model-invocation: true
 ---
 
 # Ship
 
-Drive the work to done. You are the tech lead running the build; the user is your **EM**.
+Drive the work to done. You are the tech lead; the user is your **EM**.
 
-Ship hands off to `/to-tickets` and `/implement`, not in this repo — install from [mattpocock/skills](https://github.com/mattpocock/skills). Both are user-invocable only — to run one, read `~/.claude/skills/<name>/SKILL.md` and follow it.
+`/to-tickets` and `/implement` are user-invocable: read `~/.claude/skills/<name>/SKILL.md` and follow it. Install both from [mattpocock/skills](https://github.com/mattpocock/skills).
 
 ## 1. Set the frontier
 
-Collect the **vertical slices** from the tickets, plan, or conversation already in context. If none exist, run `/to-tickets` first.
+Collect the run's **vertical slices**.
 
-Then claim the run's **worktree**. A run owns one branch and one tree, so concurrent runs never share a working directory:
+- **Given a target** — the tickets, plan, or conversation in context.
+- **Given nothing** — discover them. A feature is a ticket directory (`.scratch/<slug>/issues/`, or the configured tracker); a ticket is **ready** when its status is `ready-for-agent` and every ticket blocking it is done. Rank features by closeness to done, with ready counts; the EM picks one, even when it's the only candidate.
+- **Neither** — run `/to-tickets` first.
+
+Then claim the run's **worktree** — a run owns one branch and one tree:
 
 ```
 git worktree add <worktree-root>/<repo>-<slug> -b ship/<slug>
 ```
 
-The **worktree root** is where this machine keeps agent worktrees — a declared fact, not a guess. Read it from `CLAUDE.md`; if none declares one, ask the user and offer to record the answer there. Keep it outside every repo, or it turns up in project discovery and recursive greps.
+The **worktree root** — read from `CLAUDE.md`, else ask the EM and offer to record it there — sits outside every repo. `<slug>` names the feature; that path is the working root for you and every subagent.
 
-`<slug>` names the feature. That absolute path is the run's working root — you and every subagent operate there.
-
-Show the ordered slice list and confirm it once. This is the last check-in until ship.
+Show the ordered slices and confirm once — the last check-in until ship.
 
 ## 2. Run the frontier
 
 Take slices in dependency order, **one at a time**. For each, spawn a subagent (`model: opus`) with a fresh context whose brief is:
 
 - the worktree path, absolute, as its working root — pass it to every command; a `cd` won't survive the next call
-- the slice's behaviour and acceptance criteria
-- the surrounding decisions it needs (domain vocabulary, ADRs, prior slices' shape)
+- the slice's behaviour and acceptance criteria, plus surrounding decisions (domain vocabulary, ADRs, prior slices' shape)
 - "Implement this slice with `/implement`. Land it **green** — typecheck and tests pass — then commit to the current branch. If you cannot go green, report why instead of committing."
 
-Inside the worktree "the current branch" is `ship/<slug>`, so the commit lands where it belongs.
+An emulator, a device, a fixed port can't be shared. Treat each as **exclusive**: a slice holds it until it lands; a UI worktree takes its own port. Log the claim for parallel runs.
 
-Some things can't be shared between runs: an emulator, a physical device, a fixed port. Treat each as **exclusive** — a slice needing one holds it until that slice lands, and a worktree serving a UI takes its own port instead of the default. Note the claim in the log so a parallel run can wait for it.
+When a subagent returns, **validate it yourself** — your job rides on what reaches the EM working as ticketed:
 
-When a subagent returns: verify green yourself, then start the next slice. A slice that returns red is yours to diagnose — repair it or escalate it.
+- run green in the worktree; never take the claim on trust
+- read the diff against the acceptance criteria; check tests exercise the behaviour, not restate it
+- exercise it end-to-end when the slice is user-visible
 
-Keep a running log of slices landed and every judgement call you made alone.
+Hand parts to a subagent when cheaper; the verdict is yours. Red is never escalation — diagnose and repair it. Then mark the ticket `**Status:** landed — <sha>`, committed with the slice, so discovery sees it done.
+
+Log slices landed and every judgement call made alone.
 
 ## 3. Report as to an EM
 
-Your EM has hired you to decide. Between slices, decide and keep moving — record the call in the log rather than asking.
+Your EM hired you to decide: between slices, decide and keep moving — log the call rather than asking.
 
-Surface work in progress at exactly two moments:
+Surface work at exactly two moments:
 
-- **A blocker** — a live decision only the EM can make: it changes *what* is being built rather than *how*, costs more than a slice to reverse, or reaches outside the repo (spend, external services, anything user-facing in prod).
+- **A blocker** — a live decision only the EM can make: it changes *what* is being built rather than *how*, costs more than a slice to reverse, or reaches outside the repo (spend, external services, anything user-facing in prod). A failure exposing a broken spec is a blocker; the failure itself never is.
 - **Ready to ship** — the frontier is empty.
 
-State a blocker as: the decision, the options, your recommendation, and what is parked until it is answered. Then park that slice and take the next unblocked one.
+State a blocker as: the decision, the options, your recommendation, what's parked. Then take the next unblocked slice.
 
 ## 4. Ship
 
 When the frontier empties, **land** the branch:
 
-1. Merge the **default branch** into `ship/<slug>` **inside the worktree**. Every conflict is resolved here, in isolation, where a bad merge costs nothing and you can retry freely — you hold the context for these calls, which is why the resolution is yours and not the EM's.
+1. Merge the **default branch** into `ship/<slug>` **inside the worktree**. Conflicts resolve here, where a bad merge costs nothing and the context is yours.
 2. Verify green again.
-3. Land on the default branch as a strict fast-forward. Rejection means it moved while you worked: re-merge and retry.
+3. Land on the default branch as a strict fast-forward. Rejection means it moved: re-merge and retry.
 4. Remove the worktree.
+5. Bounce whatever runs the code — restart the server, reinstall the app — so the EM can watch it live. The repo tells you how.
 
-A run that ends red or blocked leaves its worktree standing, so the wreckage can be inspected.
+A blocked run leaves its worktree standing.
 
 Then report:
 
 - slices landed, with their commits
-- judgement calls made alone, so the EM can overturn any of them
+- judgement calls made alone, for the EM to overturn
 - what stands between here and prod — migrations, config, rollout order, anything unverified
 
 Then stop and wait for the EM.
