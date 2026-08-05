@@ -1,12 +1,13 @@
 ---
 name: skill-edit
-description: REQUIRED for all skill file writes and edits — never use Write/Edit tools on skill files directly. Enforces: new skills ≤500 words, edits never grow.
+description: Word-budgeted editor for skill files — new skills ≤500 words, edits never grow.
+disable-model-invocation: true
 ---
 
 # Skill Editor
 
 ## When to Use
-Always invoke for any `~/.claude/skills/` file. Direct Write/Edit use on skill files is prohibited.
+Invoke by hand when you want the word budget enforced on a skill file. Nothing fires it automatically.
 
 ---
 
