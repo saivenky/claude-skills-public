@@ -22,7 +22,7 @@ Each feature gets its own worktree and `ship/<slug>` branch. Within a feature, s
 
 Work the pooled frontier breadth-first: every feature with an unblocked ready ticket is started, no stagger. Contention is resolved by exclusive resources — a feature needing one that's held waits for it — not by a queue.
 
-You spawn slice subagents directly. There is **no per-feature lead**: one tech lead, many engineers.
+You spawn slice subagents directly, sized to the slice as `ship` §2 says. There is **no per-feature lead**: one tech lead, many engineers.
 
 ## 3. Validate every return yourself
 

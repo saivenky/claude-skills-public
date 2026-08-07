@@ -1,6 +1,6 @@
 ---
 name: ship
-description: "Drive a feature's tickets to done — one slice at a time, each in a fresh Opus subagent, escalating only what an EM would decide."
+description: "Drive a feature's tickets to done — one slice at a time, each in a fresh subagent, escalating only what an EM would decide."
 disable-model-invocation: true
 ---
 
@@ -30,11 +30,13 @@ Show the ordered slices and confirm once — the last check-in until ship.
 
 ## 2. Run the frontier
 
-Take slices in dependency order, **one at a time**. For each, spawn a subagent (`model: opus`) with a fresh context whose brief is:
+Take slices in dependency order, **one at a time**. For each, spawn a subagent with a fresh context whose brief is:
 
 - the worktree path, absolute, as its working root — pass it to every command; a `cd` won't survive the next call
 - the slice's behaviour and acceptance criteria, plus surrounding decisions (domain vocabulary, ADRs, prior slices' shape)
 - "Implement this slice with `/implement`. Land it **green** — typecheck and tests pass — then commit to the current branch. If you cannot go green, report why instead of committing."
+
+**Size the model to the slice.** Opus when the work turns on **taste** — prompt text, UI, copy, anything a passing test can't vouch for. Sonnet otherwise; Haiku where the slice is mechanical. Log the choice with the slice.
 
 An emulator, a device, a fixed port can't be shared. Treat each as **exclusive**: a slice holds it until it lands; a UI worktree takes its own port. Log the claim for parallel runs.
 
@@ -44,7 +46,7 @@ When a subagent returns, **validate it yourself** — your job rides on what rea
 - read the diff against the acceptance criteria; check tests exercise the behaviour, not restate it
 - exercise it end-to-end when the slice is user-visible
 
-Hand parts to a subagent when cheaper; the verdict is yours. Red is never escalation — diagnose and repair it. Then mark the ticket `**Status:** landed — <sha>`, committed with the slice, so discovery sees it done.
+Hand parts to a subagent when cheaper; the verdict is yours. Red is never escalation — repair it yourself, or re-spawn the slice a tier up; either way it stays with you. Then mark the ticket `**Status:** landed — <sha>`, committed with the slice, so discovery sees it done.
 
 Log slices landed and every judgement call made alone.
 
@@ -63,9 +65,9 @@ State a blocker as: the decision, the options, your recommendation, what's parke
 
 When the frontier empties, **land** the branch:
 
-1. Merge the **default branch** into `ship/<slug>` **inside the worktree**. Conflicts resolve here, where a bad merge costs nothing and the context is yours.
+1. Merge the **default branch** into `ship/<slug>` **inside the worktree**. It moved while you worked — others commit to it too — so expect real conflicts. They resolve here, where a bad merge costs nothing and the context is yours; a conflict is yours to resolve, never a blocker.
 2. Verify green again.
-3. Land on the default branch as a strict fast-forward. Rejection means it moved: re-merge and retry.
+3. Land on the default branch as a strict fast-forward. Rejection means it moved again: re-merge, verify green, retry.
 4. Remove the worktree.
 5. Bounce whatever runs the code — restart the server, reinstall the app — so the EM can watch it live. The repo tells you how.
 
