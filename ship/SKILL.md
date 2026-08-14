@@ -8,6 +8,8 @@ disable-model-invocation: true
 
 Drive the work to done. You are the tech lead; the user is your **EM**.
 
+The run is **unattended**. Invoking it is the EM leaving the room, so the run never opens with a check-in and never stops to confirm what it can decide: it decides, logs the call for the EM to overturn, and keeps going. Only §3's two moments reach them.
+
 `/to-tickets` and `/implement` are user-invocable: read `~/.claude/skills/<name>/SKILL.md` and follow it. Install both from [mattpocock/skills](https://github.com/mattpocock/skills).
 
 ## 1. Set the frontier
@@ -15,7 +17,7 @@ Drive the work to done. You are the tech lead; the user is your **EM**.
 Collect the run's **vertical slices**.
 
 - **Given a target** — the tickets, plan, or conversation in context.
-- **Given nothing** — discover them. A feature is a ticket directory (`.scratch/<slug>/issues/`, or the configured tracker); a ticket is **ready** when its status is `ready-for-agent` and every ticket blocking it is done. Rank features by closeness to done, with ready counts; the EM picks one, even when it's the only candidate.
+- **Given nothing** — discover them. A feature is a ticket directory (`.scratch/<slug>/issues/`, or the configured tracker); a ticket is **ready** when its status is `ready-for-agent` and every ticket blocking it is done. Rank features by closeness to done, with ready counts, and take the top-ranked one. Passing a target is how the EM steers; invoking with none is consent to the ranking.
 - **Neither** — run `/to-tickets` first.
 
 Then claim the run's **worktree** — a run owns one branch and one tree:
@@ -24,9 +26,9 @@ Then claim the run's **worktree** — a run owns one branch and one tree:
 git worktree add <worktree-root>/<repo>-<slug> -b ship/<slug>
 ```
 
-The **worktree root** — read from `CLAUDE.md`, else ask the EM and offer to record it there — sits outside every repo. `<slug>` names the feature; that path is the working root for you and every subagent.
+The **worktree root** — read from `CLAUDE.md`, else `../.worktrees/` beside the repo — sits outside every repo. Undeclared, use that fallback and record it in `CLAUDE.md` as part of the run; don't stop to ask. `<slug>` names the feature; that path is the working root for you and every subagent.
 
-Show the ordered slices and confirm once — the last check-in until ship.
+Then announce the run and start it in the same breath — the chosen feature, the ordered slices, the model tier picked for each. An **announcement is not a gate**: don't wait on it. An EM still at the keyboard can interrupt; one who has walked away came back to a finished run, not a prompt.
 
 ## 2. Run the frontier
 

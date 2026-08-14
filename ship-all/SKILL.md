@@ -14,7 +14,7 @@ Read `~/.claude/skills/ship/SKILL.md` and follow it per feature — worktree, sl
 
 Discover every feature in this repo by ship's rule: a ticket directory whose tickets carry `**Status:** ready-for-agent`. One repo only — a second repo is a second run.
 
-Present the pool once, ranked by closeness to done: ready count, total open, and any **exclusive** resource two features both need (emulator, device, port). Note any ticket blocked by a ticket in another feature. The EM confirms the set — the last check-in until a blocker or the final report.
+Announce the pool once and start it in the same breath, ranked by closeness to done: ready count, total open, and any **exclusive** resource two features both need (emulator, device, port). Note any ticket blocked by a ticket in another feature. The run is unattended, as ship says — the announcement is not a gate, and the whole pool is the set unless the EM interrupts.
 
 ## 2. Run every frontier
 
