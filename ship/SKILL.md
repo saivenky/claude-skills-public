@@ -6,7 +6,7 @@ disable-model-invocation: true
 
 # Ship
 
-Read [`leading`](../leading/SKILL.md) and follow it; this file holds only the technical shipping steps. Invoking `/ship` is the EM leaving the room — the run is unattended.
+Read [`leading`](../leading/SKILL.md) before anything else and follow it; this file holds only the technical shipping steps. Invoking `/ship` is the EM leaving the room — the run is unattended.
 
 `/implement` is user-invocable: read `~/.claude/skills/implement/SKILL.md` and follow it. Install it from [mattpocock/skills](https://github.com/mattpocock/skills).
 
