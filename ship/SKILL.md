@@ -22,13 +22,15 @@ git worktree add <worktree-root>/<repo>-<slug> -b ship/<slug>
 
 The **worktree root** — read from `CLAUDE.md`, else `../.worktrees/` beside the repo — sits outside every repo. Undeclared, use that fallback and record it in `CLAUDE.md` as part of the run. `<slug>` names the feature; that path is the working root for you and every subagent.
 
+Scratch files — stubs, logs, screenshots, throwaway scripts — live in `.scratch/` inside the worktree, so removing the worktree removes them. List `.scratch/` in the repo's `info/exclude` if it is not there yet; `git rev-parse --git-common-dir` finds it, and every worktree shares it.
+
 Announce the ordered slices and the model tier for each, and start.
 
 ## 2. Run the slices
 
-Take slices in dependency order, **one at a time**, in the worktree. Each slice's brief adds to leading's: "Implement this slice with `/implement`. Land it **green**, then commit to the current branch. If you cannot go green, report why instead of committing."
+Take slices in dependency order, **one at a time**, in the worktree. Each slice's brief adds to leading's: "Implement this slice with `/implement`. Land it **green**, then commit to the current branch. If you cannot go green, report why instead of committing. Put scratch files in the worktree's `.scratch/`, and list anything you left outside it."
 
-An emulator, a device, a fixed port are **exclusive**: a slice holds one until it lands; a UI worktree takes its own port.
+An emulator, a device, a fixed port are **exclusive**: a slice holds one until it lands; a UI worktree takes its own port. Other sessions share them too — the repo's context skill (Android: `android-context`) names each one and how to lock it. When one is busy, the slice still builds, runs every check that does not need it, and reports the QA still pending. Hold that slice as **built, QA pending**, and once the resource frees, dispatch just the QA. QA is done only when it passes on that resource.
 
 **Validate** every return — what reaches the EM must work as specified:
 
