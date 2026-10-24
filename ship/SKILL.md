@@ -30,7 +30,7 @@ Announce the ordered slices and the model tier for each, and start.
 
 Take slices in dependency order, **one at a time**, in the worktree. Each slice's brief adds to leading's: "Implement this slice with `/implement`. Land it **green**, then commit to the current branch. If you cannot go green, report why instead of committing. Put scratch files in the worktree's `.scratch/`, and list anything you left outside it."
 
-An emulator, a device, a fixed port are **exclusive**: a slice holds one until it lands; a UI worktree takes its own port. Other sessions share them too — the repo's context skill (Android: `android-context`) names each one and how to lock it. When one is busy, the slice still builds, runs every check that does not need it, and reports the QA still pending. Hold that slice as **built, QA pending**, and once the resource frees, dispatch just the QA. QA is done only when it passes on that resource.
+An emulator, a device, a fixed port are **exclusive**: a slice holds one until it lands; a UI worktree takes its own port. Other sessions share them too — the repo's `CLAUDE.md`, or a skill it points to, names each one and how to lock it. When one is busy, the slice still builds, runs every check that does not need it, and reports the QA still pending. Hold that slice as **built, QA pending**, and once the resource frees, dispatch just the QA. QA is done only when it passes on that resource.
 
 **Validate** every return — what reaches the EM must work as specified:
 
