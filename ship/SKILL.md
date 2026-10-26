@@ -12,7 +12,7 @@ Read [`leading`](../leading/SKILL.md) before anything else and follow it; this f
 
 ## 1. Cut the slices
 
-The feature is the one grilled or planned in **this conversation**. Its **vertical slices** come from its ticket files when they were written, else cut them from the conversation. Nothing in context to ship — say so in one line and stop.
+The feature is the one grilled or planned in **this conversation**. Its **vertical slices** come from its ticket files when they were written. With no ticket files, read [`SLICING.md`](../to-tickets/SLICING.md) and cut the slices from the conversation by it. Nothing in context to ship — say so in one line and stop.
 
 Then claim the feature's **worktree** — one branch, one tree:
 
@@ -24,11 +24,11 @@ The **worktree root** — read from `CLAUDE.md`, else `../.worktrees/` beside th
 
 Scratch files — stubs, logs, screenshots, throwaway scripts — live in `.scratch/` inside the worktree, so removing the worktree removes them. List `.scratch/` in the repo's `info/exclude` if it is not there yet; `git rev-parse --git-common-dir` finds it, and every worktree shares it.
 
-Announce the ordered slices and the model tier for each, and start.
+Announce the `Sizing:` line when you cut the slices yourself, then the ordered slices and the model tier for each, and start.
 
 ## 2. Run the slices
 
-Take slices in dependency order, **one at a time**, in the worktree. Each slice's brief adds to leading's: "Implement this slice with `/implement`. Land it **green**, then commit to the current branch. If you cannot go green, report why instead of committing. Put scratch files in the worktree's `.scratch/`, and list anything you left outside it."
+Take slices in dependency order, **one at a time**, in the worktree. A worker that reports running out of context or being compacted held a slice too big for one window: split that slice in two — two ticket files when it had one — and dispatch each half fresh. Each slice's brief adds to leading's: "Implement this slice with `/implement`. Land it **green**, then commit to the current branch; when the slice has a ticket file, set its `**Status:** landed` in that same commit. If you cannot go green, report why instead of committing. Put scratch files in the worktree's `.scratch/`, and list anything you left outside it."
 
 An emulator, a device, a fixed port are **exclusive**: a slice holds one until it lands; a UI worktree takes its own port. Other sessions share them too — the repo's `CLAUDE.md`, or a skill it points to, names each one and how to lock it. When one is busy, the slice still builds, runs every check that does not need it, and reports the QA still pending. Hold that slice as **built, QA pending**, and once the resource frees, dispatch just the QA. QA is done only when it passes on that resource.
 
@@ -37,8 +37,6 @@ An emulator, a device, a fixed port are **exclusive**: a slice holds one until i
 - run green in the worktree yourself
 - check the diff against the acceptance criteria, and that tests exercise the behaviour rather than restate it — brief a subagent for this and take back a thin verdict; read the diff yourself only for taste work
 - exercise it end-to-end when the slice is user-visible
-
-When ticket files exist, mark the ticket `**Status:** landed — <sha>`, committed with the slice.
 
 ## 3. Land
 
