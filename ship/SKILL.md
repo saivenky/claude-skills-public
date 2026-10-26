@@ -12,7 +12,7 @@ Read [`leading`](../leading/SKILL.md) before anything else and follow it; this f
 
 ## 1. Cut the slices
 
-The feature is the one grilled or planned in **this conversation**. Its **vertical slices** come from its ticket files when they were written. With no ticket files, read [`SLICING.md`](../to-tickets/SLICING.md) and cut the slices from the conversation by it. Nothing in context to ship — say so in one line and stop.
+The feature is the one grilled or planned in **this conversation**. Its **vertical slices** come from its ticket files when they were written. With no ticket files, read [`SLICING.md`](SLICING.md) and cut the slices from the conversation by it. Nothing in context to ship — say so in one line and stop.
 
 Then claim the feature's **worktree** — one branch, one tree:
 
